@@ -1,7 +1,7 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: ajaxtodos
+  database: railsajaxtodos
   host: localhost
   pool: 5
-  username: dylanoshea
+  username: amadden80

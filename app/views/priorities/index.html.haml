@@ -1,0 +1,15 @@
+#list
+  %table{class:''}
+    %thead
+      %tr
+        %th
+          Name
+        %th
+          Urgency Index
+      %tbody
+        - @priorities.each do |t|
+          %tr{style:'background-color:'+t.color}
+            %td
+              = t.name
+            %td
+              = t.urgency_index  

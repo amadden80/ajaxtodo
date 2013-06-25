@@ -1,21 +1,30 @@
 = form_for @task do |f|
+  = f.label :name
+  = f.text_field :name
+  = f.label :desc
   = f.text_field :desc
+  = f.label :duedate
+  %input#task_duedate{type:'date', name:'task[date]'}
+  / = f.text_field :duedate
+  = f.label :priority
+  = f.select :priority_id, @priorities.map { |p| [p.name, p.id] }
   = f.submit id: 'submit'
 #list
-  - @tasks.each do |t|
-    .task= t.desc
-:javascript
-  $(function(){
-  	$('#submit').on('click', function(e){
-  		//prevents the default behavior of the form, i.e. submitting the form
-  		e.preventDefault();
-  		//some action
-  		
-  		$.post('/tasks', {desc: $('#task_desc').val() }, function(data){
-  			$('#list').append('<div class="task">'+data+'</div>')
-  			$('#task_desc').val('')
-  		});
-  	});
-  
-  	// $('#list').load('/tasks')
-  })
+  %table{class:''}
+    %thead
+      %tr
+        %th#taskcol-name
+          =link_to 'Name', '#'
+        %th#taskcol-desc
+          =link_to 'Description', '#'
+        %th#taskcol-duedate
+          =link_to 'Due Date', '#'
+      %tbody#task-list
+        - @tasks.each do |t|
+          %tr.task{style:'background-color:'+t.priority.color}
+            %td.name=t.name
+            %td.desc=t.desc
+            %td.duedate=t.duedate
+
+
+= javascript_include_tag'tasks'

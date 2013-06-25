@@ -1,0 +1,19 @@
+#list
+  %table{class:''}
+    %thead
+      %tr
+        %th
+          Name
+        %th
+          Description
+        %th
+          Due Date
+      %tbody
+        - @tasks.each do |t|
+          %tr.tast{style:'background-color:'+t.priority.color}
+            %td
+              = t.name
+            %td
+              = t.desc
+            %td
+              = t.duedate

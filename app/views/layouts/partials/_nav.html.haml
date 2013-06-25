@@ -1,0 +1,24 @@
+%nav.top-bar
+  %ul.title-area
+    %li.name
+      %h1
+        %a{:href => "/"} AM-87 ToDo
+    %li.toggle-topbar.menu-icon
+      %a{:href => "#"}
+        %span 
+  %section.top-bar-section
+    / Left Nav Section
+    %ul.left
+      %li.divider
+      %li.active
+        %a{:href => "/tasks"} Tasks
+      %li.divider
+      %li
+        %a{:href => "/tasks/new"} +task
+      %li.divider
+      %li
+        %a{:href => "/priorities/new"} +priority
+      %li.divider
+      %li.divider.show-for-small
+      / %li.has-form
+      /   %a.button{:href => "#"} Complete All!
