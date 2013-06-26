@@ -4,6 +4,7 @@
   = f.label :color
   / = f.color_field :color
   %input#priority_color{type:'color', name:'priorty[color]'}
+  / %input{class:'priority_color minicolors minicolors-theme-default minicolors-swatch-position-left minicolors-swatch-left minicolors-position-default'}
   = f.label :urgency_index
   = f.text_field :urgency_index
   = f.submit id: 'submit'

@@ -4,7 +4,7 @@
   = f.label :desc
   = f.text_field :desc
   = f.label :duedate
-  %input#task_duedate{type:'date', name:'task[date]'}
+  %input#task_duedate{type:'date', name:'task[duedate]', value:"2000-01-01"}
   / = f.text_field :duedate
   = f.label :priority
   = f.select :priority_id, @priorities.map { |p| [p.name, p.id] }
@@ -19,12 +19,16 @@
           =link_to 'Description', '#'
         %th#taskcol-duedate
           =link_to 'Due Date', '#'
+        %th.hidden
+          Ugency
       %tbody#task-list
         - @tasks.each do |t|
           %tr.task{style:'background-color:'+t.priority.color}
             %td.name=t.name
             %td.desc=t.desc
             %td.duedate=t.duedate
+            %td.hidden{class:'urgency_index'}
+              =t.priority.urgency_index
 
 
 = javascript_include_tag'tasks'

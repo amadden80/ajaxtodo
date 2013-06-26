@@ -1,11 +1,41 @@
 $(function(){
-  function add_node(task){
+
+  function add_node(task, current_sort){
+    var current_sort = current_sort || 'name';
     var row_list = $('tbody').children()
     for(var i=0; i<row_list.size(); i++){
       node = $(row_list[i]);
-      node_desc = node.children('.desc').text();
-      task_desc = task.children('.desc').text();
-      if(task_desc < node_desc){
+      node_attrib = node.children('.'+current_sort).text();
+      task_attrib = task.children('.'+current_sort).text();
+
+      if (current_sort === "urgency_index"){
+        node_attrib = parseFloat(node_attrib);
+        task_attrib = parseFloat(task_attrib);
+        if (task_attrib === node_attrib){
+          for(var n=i; n<row_list.size(); n++){
+            node = $(row_list[n]);
+            node_uig = parseFloat(node.children('.urgency_index').text());
+            task_uig = parseFloat(task.children('.urgency_index').text());
+            node_attrib = node.children('.name').text();
+            task_attrib = task.children('.name').text();
+            if (node_uig === task_uig){
+              if(task_attrib < node_attrib){
+                task.insertBefore(node);
+                return;
+              }
+              else{
+                $('tbody').append(task)
+              }
+            }
+            else
+            {
+              task.insertBefore(node);
+            }
+          }
+        }
+      }
+
+      if(task_attrib < node_attrib){
         task.insertBefore(node);
         return;
       }else{
@@ -33,8 +63,10 @@ $(function(){
       task.append($('<td class="name">').text(data.name));
       task.append($('<td class="desc">').text(data.desc));
       task.append($('<td class="duedate">').text(data.duedate));
+      task.append($('<td class="hidden urgency_index">').text(data.urgency_index));
+
       // $('#task-list').append(task);
-      add_node(task);
+      add_node(task, data.current_sort);
 
       $('#task_name').val('');
       $('#task_desc').val('');
@@ -43,14 +75,15 @@ $(function(){
   });
 
 
-  function stort_col(col_name){
 
-    tasks = $('.task').sort(function(x,y){
-      if ($($(x).children(col_name)).text() > $($(y).children(col_name)).text()){return -1;}
-      else{return 1;}
-    })
-    for (var i = 0; i<tasks.length; i++){ $('#task-list').prepend($(tasks[i])); }
-  }
+  // function stort_col(col_name){
+
+  //   tasks = $('.task').sort(function(x,y){
+  //     if ($($(x).children(col_name)).text() > $($(y).children(col_name)).text()){return -1;}
+  //     else{return 1;}
+  //   })
+  //   for (var i = 0; i<tasks.length; i++){ $('#task-list').prepend($(tasks[i])); }
+  // }
 
   // $('#taskcol-name').on('click', function(e){
   //   e.preventDefault();
@@ -68,8 +101,13 @@ $(function(){
   // })
 
 
-  function filled_task_table(tasks){
-    $('#task-list').empty()
+  function filled_task_table(data){
+
+    var current_sort = data.current_sort;
+    var tasks = data.tasks;
+
+    $('#task-list').empty();
+
     for (var i = 0; i<tasks.length; i++){ 
       task = $('<tr class="task">').css('background-color', tasks[i].color);
       task.append($('<td class="name">').text(tasks[i].name));
@@ -78,7 +116,6 @@ $(function(){
       $('#task-list').append($(task));
     }
   }
-
 
   $('#taskcol-name').on('click', function(e){
     e.preventDefault();
@@ -100,5 +137,10 @@ $(function(){
       filled_task_table(tasks)
     })
   })
+
+
+
+  $('.hidden').hide()
+
 
 })
