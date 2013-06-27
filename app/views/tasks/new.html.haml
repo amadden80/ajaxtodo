@@ -1,4 +1,4 @@
-= form_for @task do |f|
+= form_for(@task, id: 'task-form')  do |f|
   = f.label :name
   = f.text_field :name
   = f.label :desc
@@ -31,22 +31,21 @@
         %th.hidden
           Priorty Id
       %tbody#task-list
-        - @tasks.each do |t|
-          %tr.task{style:'background-color:'+t.priority.color}
-            %td.hidden.id=t.id
-            %td.arrows
-              =link_to '', '#', {class:'general foundicon-up-arrow up-button'}
-              =link_to '', '#', {class:'general foundicon-down-arrow down-button'}
-            %td.name=t.name
-            %td.desc=t.desc
-            %td.duedate=t.duedate
-            %td.options
-              =link_to '', '#', {class:'general foundicon-edit edit-button'}
-              =link_to '', '#', {class:'general foundicon-trash delete-button'}
-            %td.hidden{class:'urgency_index'}
-              =t.priority.urgency_index
-            %td.hidden{class:'priority_id'}
-              =t.priority_id
-
+        / - @tasks.each do |t|
+        /   %tr.task{style:'background-color:'+t.priority.color}
+        /     %td.hidden.id=t.id
+        /     %td.arrows
+        /       =link_to '', '#', {class:'general foundicon-up-arrow up-button'}
+        /       =link_to '', '#', {class:'general foundicon-down-arrow down-button'}
+        /     %td.name=t.name
+        /     %td.desc=t.desc
+        /     %td.duedate=t.duedate
+        /     %td.options
+        /       =link_to '', '#', {class:'general foundicon-edit edit-button'}
+        /       =link_to '', '#', {class:'general foundicon-trash delete-button'}
+        /     %td.hidden{class:'urgency_index'}
+        /       =t.priority.urgency_index
+        /     %td.hidden{class:'priority_id'}
+        /       =t.priority_id
 
 = javascript_include_tag'tasks'

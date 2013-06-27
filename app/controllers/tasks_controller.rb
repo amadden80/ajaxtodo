@@ -13,6 +13,11 @@ class TasksController < ApplicationController
 		end
 
 		@priorities = Priority.all
+
+		@data = {}
+		@data['tasks'] = @tasks
+		@data['current_sort'] = session[:sort_by]
+
 	end
 
 	def sort
@@ -26,7 +31,7 @@ class TasksController < ApplicationController
 			tasks = Task.order(sort_by)
 		end
 
-		tasks = tasks.map {|task| {id: task.id, name: task.name, desc: task.desc, duedate: task.duedate, color: task.priority.color} }
+		tasks = tasks.map {|task| {id: task.id, name: task.name, desc: task.desc, duedate: task.duedate, color: task.priority.color, urgency_index: task.priority.urgency_index} }
 
 		data = {}
 		data['current_sort'] = sort_by
@@ -41,12 +46,18 @@ class TasksController < ApplicationController
 		task = Task.new(params[:task])
 		task.save!
 
-		data = task
+		task['color'] = task.priority.color
+		task['urgency_index'] = task.priority.urgency_index
+		data['tasks'] = [task]
 		data['current_sort'] = session[:sort_by]
-		data['color'] = task.priority.color
-		data['urgency_index'] = task.priority.urgency_index
 
-		render json: data
+		# @data =  data.to_json.html_safe
+		# respond_to do |format|
+		# 	format.js 
+		# end
+		# { render :layout => false }
+	  render json: data
+
 	end
 
 	def update
@@ -55,19 +66,19 @@ class TasksController < ApplicationController
 		task = Task.find(params[:task][:id])  
 		
     if task.update_attributes(params[:task])
-    	data = task;
+    	data= task
     	data['success'] = true
-    	data['current_sort'] = session[:sort_by]
-			data['color'] = task.priority.color
-			data['urgency_index'] = task.priority.urgency_index
     else
-    	data = task;
+    	data=task
     	data['success'] = false
     end
+
+    data['current_sort'] = session[:sort_by]
+  	data['color'] = task.priority.color
+		data['urgency_index'] = task.priority.urgency_index
 		
 		render json: data
 	end
-
 
 	def index
 		@tasks = Task.all
@@ -78,12 +89,12 @@ class TasksController < ApplicationController
 
 		task = Task.find(params[:id])
 		if task.destroy()
+			data = task
 			data['success'] = true
 		else
+			data = task
 			data['success'] = false
 		end
-
-		data['task'] = task
 
 		render json: data
 	end
@@ -98,20 +109,26 @@ class TasksController < ApplicationController
 		urgency_index_array = urgency_index_array.uniq
 		priority = task.priority.urgency_index
 		index = urgency_index_array.index(priority)
-		upped = urgency_index_array[index+array_shift]
+		if (index+array_shift >=0)
+			upped = urgency_index_array[index+array_shift]
+		else
+			upped = false
+		end
+		
 		if upped
 			priority = (priorities.select{|p| p.urgency_index == upped})[0]
 			task.priority_id = priority.id
 			task.save!
 			data = task
 			data['success'] = true
-			data['color'] = task.priority.color
-			data['urgency_index'] = task.priority.urgency_index
-			data['current_sort'] = session['current_sort']
 		else
+			data['tasks'] = [task]
 			data['success'] = false
 		end
 
+		data['color'] = task.priority.color
+		data['urgency_index'] = task.priority.urgency_index
+		data['current_sort'] = session[:sort_by]
 		return data
 	end
 
