@@ -24,4 +24,8 @@ $(function(){
     });
   });
 
+
+$('#priority_color').minicolors();
+
+
 })

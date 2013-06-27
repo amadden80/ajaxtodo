@@ -2,9 +2,8 @@
   = f.label :name
   = f.text_field :name
   = f.label :color
-  / = f.color_field :color
-  %input#priority_color{type:'color', name:'priorty[color]'}
-  / %input{class:'priority_color minicolors minicolors-theme-default minicolors-swatch-position-left minicolors-swatch-left minicolors-position-default'}
+  = f.text_field :color
+  / %input#priority_color{type:'color', name:'priorty[color]'}
   = f.label :urgency_index
   = f.text_field :urgency_index
   = f.submit id: 'submit'
@@ -27,3 +26,6 @@
 
 
 = javascript_include_tag'priorities'
+
+
+

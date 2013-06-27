@@ -4,31 +4,49 @@
   = f.label :desc
   = f.text_field :desc
   = f.label :duedate
-  %input#task_duedate{type:'date', name:'task[duedate]', value:"2000-01-01"}
-  / = f.text_field :duedate
+  / %input#task_duedate{type:'date', name:'task[duedate]', value:"2000-01-01"}
+  = f.text_field :duedate
   = f.label :priority
   = f.select :priority_id, @priorities.map { |p| [p.name, p.id] }
   = f.submit id: 'submit'
+  = f.submit 'Edit Task', id: 'submit-edit'
+  .hidden#edit_id
 #list
   %table{class:''}
     %thead
       %tr
+        %th.hidden
+          ID
+        %th#taskcol-arrows
         %th#taskcol-name
           =link_to 'Name', '#'
         %th#taskcol-desc
           =link_to 'Description', '#'
         %th#taskcol-duedate
           =link_to 'Due Date', '#'
+        %th#taskcol-options
+          =link_to 'Options', '#'
         %th.hidden
           Ugency
+        %th.hidden
+          Priorty Id
       %tbody#task-list
         - @tasks.each do |t|
           %tr.task{style:'background-color:'+t.priority.color}
+            %td.hidden.id=t.id
+            %td.arrows
+              =link_to '', '#', {class:'general foundicon-up-arrow up-button'}
+              =link_to '', '#', {class:'general foundicon-down-arrow down-button'}
             %td.name=t.name
             %td.desc=t.desc
             %td.duedate=t.duedate
+            %td.options
+              =link_to '', '#', {class:'general foundicon-edit edit-button'}
+              =link_to '', '#', {class:'general foundicon-trash delete-button'}
             %td.hidden{class:'urgency_index'}
               =t.priority.urgency_index
+            %td.hidden{class:'priority_id'}
+              =t.priority_id
 
 
 = javascript_include_tag'tasks'

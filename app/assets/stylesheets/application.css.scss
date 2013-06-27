@@ -1,7 +1,12 @@
 /*
  *
  *= require_self
- *
+ *= require jquery.minicolors
  */
 @import 'foundation';
 @import 'foundation-icons';
+
+body{
+  display:none;
+}
+
